@@ -4,3 +4,4 @@
 *.opensdf
 Intermediate/
 build/
+ipch/

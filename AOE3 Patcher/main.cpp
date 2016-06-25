@@ -1,18 +1,9 @@
-#include <sys/stat.h>
-
-#define XML_LIBRARY 
-#define XERCES_STATIC_LIBRARY
-
-#include <iostream>
-#include <fstream>
-#include <string>
-	
-#include <Windows.h>
+#include "pch.hpp"
+#include "PatchData.hpp"
+#include "ProtoPatcher.hpp"
 
 #include <xercesc/util/PlatformUtils.hpp>
 
-#include "PatchData.hpp"
-#include "ProtoPatcher.hpp"
 
 using namespace std;
 
@@ -75,7 +66,7 @@ bool confirm(const std::string& question) {
 std::pair<string, string> patchFiles("age3x.exe", "data\\protox.xml");
 
 int main() {
-  cout << "=== Age of Empires III:WC - unit cap patcher v1.0 ===" << endl << endl;
+  cout << "=== Age of Empires III:WC - unit cap patcher v1.1 ===" << endl << endl;
 
   try {
     std::string& fileName = patchFiles.first;

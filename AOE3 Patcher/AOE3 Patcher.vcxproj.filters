@@ -24,12 +24,18 @@
     <ClCompile Include="ProtoPatcher.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PatchData.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="ProtoPatcher.hpp">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.hpp">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

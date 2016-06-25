@@ -1,8 +1,5 @@
 #pragma once
 
-#include <fstream>
-#include <cstdint>
-
 class PatchData {
 public:
   /** This constructor instantiates the data with the unpatched version

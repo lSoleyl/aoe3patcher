@@ -1,18 +1,10 @@
+#include "pch.hpp"
 #include "ProtoPatcher.hpp"
-
-
-#define XML_LIBRARY 
-#define XERCES_STATIC_LIBRARY
-
-#include <memory>
-#include <map>
-#include <algorithm>
-#include <iostream>
-#include <string>
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/sax/HandlerBase.hpp>
 #include <xercesc/dom/DOMElement.hpp>
+#include <xercesc/dom/DOMDocument.hpp>
 #include <xercesc/dom/DOM.hpp>
 
 
@@ -31,7 +23,7 @@ std::map<wstring, wstring> buildLimits = {
 };
 
 struct ProtoPatcher::Internals {
-  DOMDocument* domDoc;
+  xercesc::DOMDocument* domDoc;
   XercesDOMParser* parser;
   HandlerBase* errHandler;
 
