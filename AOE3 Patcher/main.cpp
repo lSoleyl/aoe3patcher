@@ -37,7 +37,7 @@ void handleWinError() {
 
 
 
-void dropReadonlyFlag(const std::string& fileName) {
+bool dropReadonlyFlag(const std::string& fileName) {
   DWORD flags = GetFileAttributesA(fileName.c_str());
 
   if (flags == INVALID_FILE_ATTRIBUTES)
@@ -47,19 +47,36 @@ void dropReadonlyFlag(const std::string& fileName) {
     cout << "[INFO] Clearing readonly flag on '" << fileName << "'..." << endl;
     if (!SetFileAttributesA(fileName.c_str(), flags & ~FILE_ATTRIBUTE_READONLY))
       handleWinError();
+    return true;
   }
+
+  return false;
 }
 
-void ensureFilePatchable(const std::string& fileName) {
+/** Ensures, that the file exists and is writable.
+ *  Returns true if the readonly-flag got cleared
+ */
+bool ensureFilePatchable(const std::string& fileName) {
   if (!fileExists(fileName))
     throw std::exception(("Missing '" + fileName + "'. Please launch this program in the AOE III directory!").c_str());
 
-  dropReadonlyFlag(fileName);
+  return dropReadonlyFlag(fileName);
+}
+
+bool confirm(const std::string& question) {
+  cout << question << " [y/n]: ";
+  char choice;
+  cin >> choice;
+  if (choice == 'y' || choice == 'Y')
+    return true;
+  return false;
 }
 
 std::pair<string, string> patchFiles("age3x.exe", "data\\protox.xml");
 
 int main() {
+  cout << "=== Age of Empires III:WC - unit cap patcher ===" << endl << endl;
+
   try {
     std::string& fileName = patchFiles.first;
 
@@ -70,9 +87,8 @@ int main() {
     }
 
     //Test, whether files exist and we could write into it
-    ensureFilePatchable(patchFiles.first);
-    ensureFilePatchable(patchFiles.second);
-    cout << endl;
+    if (ensureFilePatchable(patchFiles.first) || ensureFilePatchable(patchFiles.second))
+      cout << endl;
 
     {
       ifstream source(fileName, ios::binary);
@@ -87,6 +103,8 @@ int main() {
       cout << "Found ";
       data.PrintReport();
       cout << "Build-Limit for houses is " << (proto.HasLimits() ? "enabled" : "disabled") << endl << endl;
+      if (!data.IsValid() && !confirm("[WARN] unknown code found in 'age3x.exe', file might get corrupted by this patch. Do you want to continue?"))
+        return 0;
 
       int newCap;
       cout << "Enter new population cap, or 0 to restore the original population cap and unpatch the file again. " << endl;
@@ -111,15 +129,15 @@ int main() {
       cout << "Successfully changed population cap and build-limit." << endl;
     }
 
-    xercesc::XMLPlatformUtils::Terminate();
-
-    system("PAUSE");
-    return 0;
+    
   } catch(std::exception& e) {
     cerr << endl << "[ERR] " << e.what() << endl;
     cerr << "Patching failed!" << endl;
-    system("PAUSE");
   } catch(...) {
     cerr << endl << "[ERR] caught unknown exception " << endl;
   }
+
+  xercesc::XMLPlatformUtils::Terminate();
+  system("PAUSE");
+  return 0;  
 }

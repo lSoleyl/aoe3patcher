@@ -15,6 +15,12 @@ public:
 
 
   bool IsPatched() const;
+  
+  /** Returns true, if the cmpCode is a known pattern, which is either:
+   *  * a nop sled
+   *  * the original cmp code
+   */
+  bool IsValid() const;
   int CurrentPopulationCap() const;
 
   /** Sets the population cap to the desired value

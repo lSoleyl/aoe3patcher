@@ -15,6 +15,7 @@ namespace constants {
 
   char nop = '\x90';
 
+  std::string nopSled(6, nop);
 }
 
 PatchData::PatchData() : cmpCode(constants::cmpCode), populationCaps(200,250) {}
@@ -44,8 +45,7 @@ void PatchData::SetPopulation(int populationCap) {
   populationCaps = make_pair(populationCap, populationCap);
   
   //Replace compare code by nop sled
-  for(char& byte : cmpCode)
-    byte = constants::nop;
+  cmpCode = constants::nopSled;
 }
 
 
@@ -75,6 +75,9 @@ bool PatchData::operator!=(const PatchData& other) const {
   return !(*this == other);
 }
 
+bool PatchData::IsValid() const {
+  return cmpCode == constants::cmpCode || cmpCode == constants::nopSled;
+}
 
 PatchData& PatchData::operator=(const PatchData& other) {
   cmpCode = other.cmpCode;
