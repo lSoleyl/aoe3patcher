@@ -1,5 +1,6 @@
 #include "pch.hpp"
 #include "ProtoPatcher.hpp"
+#include "Utils.hpp"
 
 #include <xercesc/parsers/XercesDOMParser.hpp>
 #include <xercesc/sax/HandlerBase.hpp>
@@ -33,10 +34,6 @@ struct ProtoPatcher::Internals {
   }
 };
 
-std::string convert(const std::wstring& source) {
-  return string(source.begin(), source.end());
-}
-
 DOMElement* FindChild(DOMElement* parent, const wstring& tagName) {
   for(DOMElement* current = parent->getFirstElementChild(); current; current = current->getNextElementSibling()) {
     if (tagName == current->getTagName())
@@ -67,9 +64,9 @@ ProtoPatcher::ProtoPatcher() : data(new Internals) {
   try {
     parser->parse(".\\data\\protox.xml");
   } catch (const XMLException& e) {
-    throw std::exception(("XMLException occurred while parsing protox.xml" + convert(e.getMessage())).c_str());
+    throw std::exception(("XMLException occurred while parsing protox.xml" + Utils::convert(e.getMessage())).c_str());
   } catch (const DOMException& e) {
-    throw std::exception(("DOMException occurred while parsing protox.xml: " + convert(e.getMessage())).c_str());
+    throw std::exception(("DOMException occurred while parsing protox.xml: " + Utils::convert(e.getMessage())).c_str());
   } catch (...) {
     throw std::exception("Caught unknown exception in parser->parse()");
   }
@@ -100,7 +97,7 @@ void ProtoPatcher::RemoveLimits() {
   for(auto& entry : buildLimits) {
     auto unitElement = FindChild(root, L"Unit", L"name", entry.first);
     if (!unitElement) {
-      cerr << "[WARN] missing unit in protox.xml: '" << convert(entry.first) << "'" << endl;
+      cerr << "[WARN] missing unit in protox.xml: '" << Utils::convert(entry.first) << "'" << endl;
       continue;
     }
 
@@ -119,7 +116,7 @@ void ProtoPatcher::RestoreLimits() {
   for(auto& entry : buildLimits) {
     auto unitElement = FindChild(root, L"Unit", L"name", entry.first);
     if (!unitElement) {
-      cerr << "[WARN] missing unit in protox.xml: '" << convert(entry.first) << "'" << endl;
+      cerr << "[WARN] missing unit in protox.xml: '" << Utils::convert(entry.first) << "'" << endl;
       continue;
     }
 

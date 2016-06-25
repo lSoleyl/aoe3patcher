@@ -13,9 +13,6 @@
 #include <cstdint>
 #include <algorithm>
 
-
-#include <sys/stat.h>	
-
 //Include windows, but omit min and max macros
 #define NOMINMAX 
 #include <Windows.h>
