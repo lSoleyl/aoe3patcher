@@ -75,7 +75,7 @@ bool confirm(const std::string& question) {
 std::pair<string, string> patchFiles("age3x.exe", "data\\protox.xml");
 
 int main() {
-  cout << "=== Age of Empires III:WC - unit cap patcher ===" << endl << endl;
+  cout << "=== Age of Empires III:WC - unit cap patcher v1.0 ===" << endl << endl;
 
   try {
     std::string& fileName = patchFiles.first;
